@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NearMe WhatsApp — Registration & Local Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b141a;
+      --page: #111b21;
+      --panel: #1f2c34;
+      --ink: #e9edef;
+      --muted: #8696a0;
+      --wa-teal: #008069;
+      --wa-green: #00a884;
+      --bubble-in: #202c33;
+      --bubble-out: #005c4b;
+      --line: #2a3942;
+      --accent: #53bdeb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Figtree", "IBM Plex Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 15% -10%, #1a3a32 0%, transparent 50%),
+        radial-gradient(700px 400px at 100% 0%, #1e2a38 0%, transparent 45%),
+        var(--page);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 64px; }
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.55rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      margin: 0 0 10px;
+      color: var(--muted);
+      max-width: 78ch;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+    .flows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 20px;
+    }
+    .flows span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: #b6d4c8;
+    }
+    .rail {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      align-items: center;
+    }
+    .rail button {
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+    .rail button.active {
+      color: #06140f;
+      background: var(--wa-green);
+      border-color: var(--wa-green);
+    }
+    .rail-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 4px 2px;
+    }
+    .rail-label + .rail-label,
+    .rail button + .rail-label {
+      margin-left: 6px;
+      padding-left: 12px;
+      border-left: 1px solid var(--line);
+    }
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .stage { grid-template-columns: 1fr; justify-items: center; }
+    }
+    .phone {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid #3b4a54;
+      background: var(--bg);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+    .status {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 18px 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--wa-teal);
+    }
+    .wa-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px 12px;
+      background: var(--wa-teal);
+    }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(145deg, #25d366, #128c7e);
+      display: grid; place-items: center;
+      font-size: 0.7rem; font-weight: 700; color: #062;
+    }
+    .wa-header .name { font-weight: 600; font-size: 0.95rem; }
+    .wa-header .sub { font-size: 0.72rem; opacity: 0.85; }
+    .chat {
+      min-height: 520px; max-height: 560px; overflow-y: auto;
+      padding: 14px 10px 12px;
+      background:
+        linear-gradient(rgba(11, 20, 26, 0.92), rgba(11, 20, 26, 0.92)),
+        repeating-linear-gradient(-12deg, transparent, transparent 11px, rgba(255,255,255,0.015) 11px, rgba(255,255,255,0.015) 12px);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .day {
+      align-self: center; background: #182229; color: var(--muted);
+      font-size: 0.7rem; padding: 4px 10px; border-radius: 8px;
+    }
+    .row { display: flex; }
+    .row.out { justify-content: flex-end; }
+    .bubble {
+      max-width: 88%; padding: 8px 10px 6px; border-radius: 8px;
+      font-size: 0.88rem; line-height: 1.4; white-space: pre-wrap;
+    }
+    .row.in .bubble { background: var(--bubble-in); border-top-left-radius: 0; }
+    .row.out .bubble { background: var(--bubble-out); border-top-right-radius: 0; }
+    .time {
+      display: block; text-align: right; font-size: 0.65rem;
+      color: rgba(233, 237, 239, 0.55); margin-top: 4px;
+    }
+    .buttons {
+      margin-top: 2px; display: flex; flex-direction: column; gap: 1px;
+      max-width: 88%; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
+    }
+    .buttons button {
+      font: inherit; font-size: 0.86rem; font-weight: 500; color: var(--accent);
+      background: var(--bubble-in); border: 0; border-top: 1px solid var(--line);
+      padding: 11px 12px; cursor: default; text-align: center;
+    }
+    .buttons button:first-child { border-top: 0; }
+    .list-card {
+      max-width: 88%; background: var(--bubble-in);
+      border-radius: 8px; border-top-left-radius: 0; overflow: hidden;
+    }
+    .list-card .body { padding: 8px 10px 6px; font-size: 0.88rem; line-height: 1.4; }
+    .list-card .cta {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px; border-top: 1px solid var(--line);
+      color: var(--accent); font-weight: 600; font-size: 0.86rem;
+    }
+    .list-card .cta svg { width: 16px; height: 16px; fill: currentColor; }
+    .loc {
+      width: 220px; border-radius: 8px; overflow: hidden; background: var(--bubble-out);
+    }
+    .loc-map {
+      height: 110px;
+      background:
+        radial-gradient(circle at 52% 48%, #ff5a5a 0 8px, transparent 9px),
+        linear-gradient(160deg, #3d5a45 0%, #2a4a3a 40%, #1e3a50 100%);
+      position: relative;
+    }
+    .loc-map::after {
+      content: "Current location";
+      position: absolute; left: 8px; bottom: 8px; font-size: 0.7rem;
+      background: rgba(0,0,0,0.45); padding: 3px 6px; border-radius: 4px;
+    }
+    .loc-meta { padding: 8px 10px 4px; font-size: 0.82rem; }
+    .loc-meta strong { display: block; font-size: 0.88rem; }
+    .pcard {
+      max-width: 88%; background: var(--bubble-in);
+      border-radius: 8px; border-top-left-radius: 0; overflow: hidden;
+    }
+    .pcard .body { padding: 8px 10px 6px; font-size: 0.88rem; line-height: 1.4; }
+    .pcard .pname { font-weight: 700; font-size: 0.95rem; }
+    .pcard .pline { color: #d1d7db; margin-top: 2px; font-size: 0.82rem; }
+    .pcard .muted { color: var(--muted); font-size: 0.8rem; margin-top: 6px; white-space: pre-wrap; }
+    .composer {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px 12px; background: #1d282f;
+    }
+    .composer .field {
+      flex: 1; background: #2a3942; border-radius: 24px;
+      padding: 10px 14px; color: var(--muted); font-size: 0.85rem;
+    }
+    .composer .attach, .composer .mic {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; color: var(--muted); font-size: 1.1rem;
+    }
+    .composer .mic { background: var(--wa-teal); color: #fff; }
+    .spec {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 16px; padding: 18px 18px 20px; min-height: 220px;
+    }
+    .spec .flow-tag {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #06140f; background: var(--wa-green);
+      padding: 4px 8px; border-radius: 6px; margin-bottom: 10px;
+    }
+    .spec h2 { margin: 0 0 6px; font-size: 1.2rem; }
+    .spec .step {
+      color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; line-height: 1.45;
+    }
+    .spec .path {
+      margin: 0; padding: 12px 14px; background: var(--bg); border-radius: 10px;
+      font-size: 0.82rem; color: #b6d4c8; line-height: 1.55;
+      font-family: ui-monospace, Consolas, monospace; white-space: pre-wrap;
+    }
+    .sheet {
+      margin-top: 14px; border: 1px solid var(--line);
+      border-radius: 12px; overflow: hidden; background: #172027;
+    }
+    .sheet h3 {
+      margin: 0; padding: 12px 14px; font-size: 0.9rem; border-bottom: 1px solid var(--line);
+    }
+    .sheet ul { list-style: none; margin: 0; padding: 0; }
+    .sheet li {
+      padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 0.88rem;
+    }
+    .sheet li:last-child { border-bottom: 0; }
+    .sheet li span { display: block; font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+    /* Web form surface (Join / invite link — not WhatsApp chat) */
+    .form-surface {
+      min-height: 520px; max-height: 560px; overflow-y: auto;
+      padding: 16px 14px 20px; background: #f6f7f8; color: #111b21;
+    }
+    .form-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .form-surface h3 {
+      margin: 0 0 6px; font-size: 1.05rem; color: #0b141a;
+    }
+    .form-surface .hint {
+      margin: 0 0 14px; font-size: 0.82rem; color: #54656f; line-height: 1.4;
+    }
+    .form-field {
+      margin-bottom: 12px;
+    }
+    .form-field label {
+      display: block; font-size: 0.72rem; font-weight: 600;
+      color: #54656f; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .form-field .box {
+      background: #fff; border: 1px solid #d1d7db; border-radius: 10px;
+      padding: 11px 12px; font-size: 0.9rem; color: #111b21;
+    }
+    .form-field .box.muted { color: #8696a0; }
+    .form-actions {
+      display: flex; flex-direction: column; gap: 8px; margin-top: 16px;
+    }
+    .form-actions .primary {
+      background: #008069; color: #fff; text-align: center;
+      padding: 12px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+    }
+    .form-actions .ghost {
+      background: #fff; color: #008069; text-align: center;
+      padding: 11px; border-radius: 10px; font-weight: 600; font-size: 0.88rem;
+      border: 1px solid #d1d7db;
+    }
+    .otp-row {
+      display: flex; gap: 8px; justify-content: center; margin: 8px 0 4px;
+    }
+    .otp-row span {
+      width: 36px; height: 42px; border-radius: 8px; border: 1px solid #d1d7db;
+      background: #fff; display: grid; place-items: center;
+      font-weight: 700; font-size: 1.1rem; color: #111b21;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>NearMe WhatsApp — Registration & Local Services</h1>
+    <p class="lede">
+      Screen walkthrough aligned with the Local Services status doc.
+      After registration: <strong>Find a home</strong> or <strong>Local services</strong>.
+      Local services has three flows — Find, Refer, Join.
+      Refer and Join use a <strong>link / invite</strong> (not chat Q&amp;A).
+      <strong>Referrer and provider both authenticate</strong>, then profile + KYC + Accept → publish.
+    </p>
+    <div class="flows">
+      <span>1 · Registration</span>
+      <span>2 · Find a service</span>
+      <span>3 · Refer: details → link → Auth → Accept</span>
+      <span>4 · Join: external link → details → Aadhaar → publish</span>
+    </div>
+
+    <div class="rail" id="rail"></div>
+    <div class="stage">
+      <div class="phone" id="phone"></div>
+      <aside class="spec" id="spec"></aside>
+    </div>
+  </div>
+
+  <script>
+    const screens = [
+      /* ── Registration ───────────────────────────────────────── */
+      {
+        id: "reg-lang",
+        group: "1 · Registration",
+        label: "Language",
+        topic: "Welcome + language",
+        step: "First open. Pick English / Tamil / Hindi.",
+        path: "Registration\n→ Language → Name → Location → Community? → Home type? → Done",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`Welcome to NearMe
+
+Your local helper for homes and trusted professionals nearby.
+
+You choose who to contact — we never message anyone for you.
+
+Please choose a language:`
+          ));
+          chat.append(replyButtons(["English", "தமிழ்", "हिन्दी"]));
+        }
+      },
+      {
+        id: "reg-name",
+        group: "1 · Registration",
+        label: "Name",
+        topic: "Display name",
+        step: "What should NearMe call you?",
+        path: "Registration · Name",
+        composer: "Type your name…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot("Language set to English.\n\nWhat should I call you?\nExample: Ramesh"));
+          chat.append(user("Ramesh"));
+          chat.append(bot("Nice to meet you, Ramesh."));
+        }
+      },
+      {
+        id: "reg-location",
+        group: "1 · Registration",
+        label: "Location",
+        topic: "Location",
+        step: "Share pin or type area. Never ask for a pincode.",
+        path: "Registration · Location\nShare location OR type area (e.g. Navalur)",
+        composer: "Type an area…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`Where do you need NearMe?
+
+Share your location once, or type your area — for example, Navalur.
+
+This is the default area for homes and local services. You can change it later.`
+          ));
+          chat.append(locationOut());
+          chat.append(bot("Got it — Navalur, Chengalpattu, Tamil Nadu."));
+        }
+      },
+      {
+        id: "reg-community",
+        group: "1 · Registration",
+        label: "Community",
+        topic: "Community (optional)",
+        step: "Only if this area has known societies. Skip always available.",
+        path: "Registration · Community (optional)",
+        composer: "Message…",
+        listSheet: {
+          title: "Communities",
+          rows: [
+            ["Olympia Opaline", "Navalur"],
+            ["Pacifica Aurum", "Navalur"],
+            ["CasaGrande", "Navalur"],
+            ["None of these", "Ask home type next"],
+            ["Other / type name", "Free text"],
+            ["Skip", "Finish registration"],
+          ],
+        },
+        render(chat) {
+          chat.append(day());
+          chat.append(listMessage("Do you live in one of these?", "Options"));
+        }
+      },
+      {
+        id: "reg-home",
+        group: "1 · Registration",
+        label: "Home type",
+        topic: "Home type (optional)",
+        step: "Only if community was skipped or “None of these”.",
+        path: "Registration · Home type (optional)",
+        composer: "Message…",
+        listSheet: {
+          title: "Home type",
+          rows: [
+            ["Apartment", ""],
+            ["Independent House", ""],
+            ["Villa", ""],
+            ["Other", "Type a description"],
+            ["Skip", "Finish without type"],
+          ],
+        },
+        render(chat) {
+          chat.append(day());
+          chat.append(user("None of these"));
+          chat.append(listMessage("Which best describes your home?", "Home type"));
+        }
+      },
+      {
+        id: "reg-done",
+        group: "1 · Registration",
+        label: "Complete",
+        topic: "You're all set",
+        step: "One completion message. Two top doors: Find a home / Local services.",
+        path: "Registration · Done\n→ Find a home  |  Local services",
+        composer: "Type what you need…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`You're all set, Ramesh.
+
+You can now find homes and trusted local professionals near you.
+
+What do you need today?
+
+• Find a home (rent / buy)
+• Local services (plumber, cook, electrician…)
+
+Tap below, or type what you need.`
+          ));
+          chat.append(replyButtons(["Find a home", "Local services", "More"]));
+        }
+      },
+
+      /* ── Hub ────────────────────────────────────────────────── */
+      {
+        id: "hub",
+        group: "2 · Local services hub",
+        label: "Choose",
+        topic: "Local services — three flows",
+        step: "Find = seeker. Refer = recommend someone. Join = I am the provider.",
+        path: "Local services\n├ Find a service\n├ Refer: details once → invite link → they Auth → Accept\n└ Join: one link outside WA → all details → Aadhaar → publish",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("Local services"));
+          chat.append(bot("What would you like to do?"));
+          chat.append(replyButtons(["Find a service", "Refer a provider", "Join as provider"]));
+        }
+      },
+
+      /* ── Find ───────────────────────────────────────────────── */
+      {
+        id: "find-ask",
+        group: "3 · Find a service",
+        label: "Ask service",
+        topic: "Find — what service?",
+        step: "They tapped Find. One question only.",
+        path: "Find\n→ Service → Area → Results / Empty",
+        composer: "e.g. plumber, cook…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot("What service do you need?\n\nFor example: plumber, cook, electrician."));
+        }
+      },
+      {
+        id: "find-typed",
+        group: "3 · Find a service",
+        label: "Typed need",
+        topic: "Find — typed from home menu",
+        step: "Clear need skips the hub and the “what service?” ask.",
+        path: "Home menu typed “need a plumber”\n→ skip hub → Area → Results",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("need a plumber"));
+          chat.append(bot("Still searching in Navalur?"));
+          chat.append(replyButtons(["Yes", "Change area"]));
+        }
+      },
+      {
+        id: "find-confirm-cat",
+        group: "3 · Find a service",
+        label: "Soft confirm",
+        topic: "Find — soft category confirm",
+        step: "Inferred job (e.g. meals → cook). Yes button, or type the real need.",
+        path: "Find · Soft confirm\nYes → continue\nType correction → re-run (no confirm loop)",
+        composer: "or type what you need…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("someone to help with meals at home"));
+          chat.append(bot(
+`Looks like you need a *Cook*. Is that right?
+Tap Yes, or just type what you actually need.`
+          ));
+          chat.append(replyButtons(["Yes"]));
+        }
+      },
+      {
+        id: "find-area",
+        group: "3 · Find a service",
+        label: "Confirm area",
+        topic: "Find — confirm saved area",
+        step: "Service known. Reuse registered location. Never ask pincode.",
+        path: "Find · Area\nYes → search  |  Change area → type place",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("plumber"));
+          chat.append(bot("Still searching in Navalur?"));
+          chat.append(replyButtons(["Yes", "Change area"]));
+        }
+      },
+      {
+        id: "find-results",
+        group: "3 · Find a service",
+        label: "Results",
+        topic: "Find — results",
+        step: "Published providers for this job + area. Number hidden until they pick one.",
+        path: "Find · Results\n→ tap name → reveal number",
+        composer: "Message…",
+        listSheet: {
+          title: "Providers",
+          rows: [
+            ["Ravi", "View number"],
+            ["Suresh", "View number"],
+          ],
+        },
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`Here are plumbers near Navalur:
+
+1. *Ravi* — Community referred
+2. *Suresh* — Community referred
+
+Tap a name to see their number.
+You choose whether to call. NearMe will not message them for you.`
+          ));
+          chat.append(listMessage("Pick someone to see their number.", "View contact"));
+        }
+      },
+      {
+        id: "find-reveal",
+        group: "3 · Find a service",
+        label: "Reveal",
+        topic: "Find — reveal contact",
+        step: "Show consented number only. Log contact_intent. No Call/WhatsApp push.",
+        path: "Find · Reveal\ncontact_intents ← reveal",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("Ravi"));
+          chat.append(providerCard({
+            name: "Ravi",
+            line: "Plumber · Navalur",
+            extra: "📞 98765 43210\n\nYou choose whether to call. NearMe will not message them for you.",
+          }));
+        }
+      },
+      {
+        id: "find-empty",
+        group: "3 · Find a service",
+        label: "No providers",
+        topic: "Find — nobody listed",
+        step: "Service not available at all. No “Refer someone” pressure.",
+        path: "Find · Empty (nowhere)\n→ try another service / menu",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("child care"));
+          chat.append(bot(
+`I don't have a babysitter / nanny listed yet.
+Try another service, or type *menu* to start over.`
+          ));
+        }
+      },
+      {
+        id: "find-expand",
+        group: "3 · Find a service",
+        label: "Other areas",
+        topic: "Find — other areas?",
+        step: "None in their area, but providers exist elsewhere. Ask once.",
+        path: "Find · Expand\nYes → show other areas  |  No → stop",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`I couldn't find a matching provider in Navalur yet.
+
+Would you like me to show providers in other areas?`
+          ));
+          chat.append(replyButtons(["Yes", "No"]));
+        }
+      },
+
+      /* ── Refer ──────────────────────────────────────────────── */
+      {
+        id: "refer-details",
+        group: "4 · Refer a provider",
+        label: "1 · Details once",
+        topic: "Refer — referrer sends details once",
+        step: "Referrer is authenticated in WhatsApp. They send all provider details in one go (not step-by-step).",
+        path: "Referrer (authenticated)\n→ Send details once\n→ Get invite link\n→ Share with that person",
+        composer: "Name, phone, service, area…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`Refer someone you trust.
+
+Send their details in *one message*:
+name, WhatsApp number, main service, area.
+
+Example:
+Ravi, 9876543210, plumber, Navalur`
+          ));
+          chat.append(user("Ravi, 9876543210, plumber, Navalur"));
+        }
+      },
+      {
+        id: "refer-link",
+        group: "4 · Refer a provider",
+        label: "2 · Invite link",
+        topic: "Refer — we give the invite link",
+        step: "After details are saved as pending, NearMe returns a link for that person. Referrer shares it to them.",
+        path: "Details saved (pending)\n→ Invite link generated\n→ Share to that phone / WhatsApp",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(bot(
+`Thanks, Ramesh.
+
+Saved for Ravi (plumber, Navalur) — pending until they Accept.
+
+Share this invite with them:
+nearme.app/invite/r8f2k
+
+They open it, verify themselves, and join.`
+          ));
+          chat.append(replyButtons(["Share invite"]));
+        }
+      },
+      {
+        id: "refer-auth",
+        group: "4 · Refer a provider",
+        label: "3 · Their auth",
+        topic: "Refer — that person authenticates",
+        surface: "form",
+        formTitle: "NearMe invite",
+        step: "They open the link you shared. First screen = OTP authenticate.",
+        path: "They open invite link\n→ Authenticate (OTP)\n→ Profile (prefilled) → KYC → Accept",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Invite from Ramesh</div>
+            <h3>Verify it's you</h3>
+            <p class="hint">Ramesh referred you as a plumber in Navalur. Confirm this WhatsApp number with an OTP.</p>
+            <div class="form-field">
+              <label>Phone</label>
+              <div class="box">+91 98765 43210</div>
+            </div>
+            <div class="form-field">
+              <label>Enter OTP</label>
+              <div class="otp-row"><span>4</span><span>8</span><span>2</span><span>_</span></div>
+            </div>
+            <div class="form-actions">
+              <div class="primary">Verify &amp; continue</div>
+            </div>`;
+        }
+      },
+      {
+        id: "refer-form",
+        group: "4 · Refer a provider",
+        label: "4 · Profile",
+        topic: "Refer — review prefilled details",
+        surface: "form",
+        formTitle: "NearMe invite",
+        step: "Details came from the referrer. They can edit, then continue to KYC.",
+        path: "Authenticated\n→ Review / edit prefilled profile",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 2 of 4 · Profile</div>
+            <h3>Confirm your details</h3>
+            <p class="hint">Prefilled from Ramesh’s referral. Change anything that’s wrong.</p>
+            <div class="form-field"><label>Display name</label><div class="box">Ravi</div></div>
+            <div class="form-field"><label>Main service</label><div class="box">Plumber</div></div>
+            <div class="form-field"><label>Areas you cover</label><div class="box">Navalur</div></div>
+            <div class="form-field"><label>Languages</label><div class="box muted">Add languages…</div></div>
+            <div class="form-actions"><div class="primary">Continue to verification</div></div>`;
+        }
+      },
+      {
+        id: "refer-kyc",
+        group: "4 · Refer a provider",
+        label: "5 · KYC",
+        topic: "Refer — identity verification",
+        surface: "form",
+        formTitle: "NearMe invite",
+        step: "Aadhaar / DigiLocker (when ready).",
+        path: "Profile ok\n→ KYC / Aadhaar\n→ Accept",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 3 of 4 · Verify identity</div>
+            <h3>Verify with Aadhaar</h3>
+            <p class="hint">We never store your full Aadhaar. A trusted partner confirms your name.</p>
+            <div class="form-actions">
+              <div class="primary">Continue with DigiLocker</div>
+              <div class="ghost">Do this later</div>
+            </div>`;
+        }
+      },
+      {
+        id: "refer-accept",
+        group: "4 · Refer a provider",
+        label: "6 · Accept",
+        topic: "Refer — Accept → publish",
+        surface: "form",
+        formTitle: "NearMe invite",
+        step: "Only after Accept are they findable. No admin queue.",
+        path: "KYC ok\n→ Accept → Published",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 4 of 4 · Consent</div>
+            <h3>Publish your listing?</h3>
+            <p class="hint">Seekers in Navalur can find you as a plumber. They choose whether to call — NearMe never messages you for them.</p>
+            <div class="form-field"><label>Summary</label><div class="box">Ravi · Plumber · Navalur · +91 98765 43210</div></div>
+            <div class="form-actions">
+              <div class="primary">Accept &amp; publish</div>
+              <div class="ghost">Decline</div>
+            </div>`;
+        }
+      },
+
+      /* ── Join ───────────────────────────────────────────────── */
+      {
+        id: "join-wa",
+        group: "5 · Join as provider",
+        label: "1 · One link",
+        topic: "Join — WhatsApp sends one link",
+        step: "They tap or type Join as a provider. Bot shares one link that opens outside WhatsApp.",
+        path: "WhatsApp: Join as a provider\n→ One link\n→ Opens outside WhatsApp",
+        composer: "Message…",
+        render(chat) {
+          chat.append(day());
+          chat.append(user("Join as a provider"));
+          chat.append(bot(
+`Want to appear in Local Services?
+
+Open this link to add your details and verify with Aadhaar.
+It opens outside WhatsApp.
+
+You appear in Find only after you Accept.`
+          ));
+          chat.append(replyButtons(["Open form"]));
+          chat.append(bot("nearme.app/join?phone=919123456789"));
+        }
+      },
+      {
+        id: "join-auth",
+        group: "5 · Join as provider",
+        label: "2 · Authenticate",
+        topic: "Join — authenticate (outside WhatsApp)",
+        surface: "form",
+        formTitle: "NearMe join",
+        step: "Browser / form — first screen: prove this number is yours (OTP).",
+        path: "External form\n→ Authenticate (OTP)",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Outside WhatsApp · Join</div>
+            <h3>Verify it's you</h3>
+            <p class="hint">Confirm the WhatsApp number before you add your details and Aadhaar.</p>
+            <div class="form-field">
+              <label>Phone</label>
+              <div class="box">+91 91234 56789</div>
+            </div>
+            <div class="form-field">
+              <label>Enter OTP</label>
+              <div class="otp-row"><span>9</span><span>1</span><span>0</span><span>3</span></div>
+            </div>
+            <div class="form-actions">
+              <div class="primary">Verify &amp; continue</div>
+            </div>`;
+        }
+      },
+      {
+        id: "join-form",
+        group: "5 · Join as provider",
+        label: "3 · All details",
+        topic: "Join — all details on the form",
+        surface: "form",
+        formTitle: "NearMe join",
+        step: "Collect everything here (name, service, areas, languages, …) — not in WhatsApp chat.",
+        path: "Authenticated\n→ All profile details on form",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 2 of 4 · Your details</div>
+            <h3>Add your listing details</h3>
+            <p class="hint">You stay independent. NearMe does not give jobs or take payment.</p>
+            <div class="form-field"><label>Display name</label><div class="box">Kumar</div></div>
+            <div class="form-field"><label>Main service</label><div class="box">Electrician</div></div>
+            <div class="form-field"><label>Areas you cover</label><div class="box">Navalur, Kelambakkam</div></div>
+            <div class="form-field"><label>Languages</label><div class="box">Tamil, English</div></div>
+            <div class="form-field"><label>Working hours</label><div class="box">9:00 AM – 6:00 PM</div></div>
+            <div class="form-actions"><div class="primary">Continue to Aadhaar verification</div></div>`;
+        }
+      },
+      {
+        id: "join-kyc",
+        group: "5 · Join as provider",
+        label: "4 · Aadhaar",
+        topic: "Join — Aadhaar verification",
+        surface: "form",
+        formTitle: "NearMe join",
+        step: "Same form, outside WhatsApp. DigiLocker / eKYC — no full Aadhaar stored in chat.",
+        path: "Details saved\n→ Aadhaar / DigiLocker verification",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 3 of 4 · Aadhaar verification</div>
+            <h3>Verify with Aadhaar</h3>
+            <p class="hint">We never store your full Aadhaar number. A trusted partner confirms your name.</p>
+            <div class="form-actions">
+              <div class="primary">Continue with DigiLocker</div>
+              <div class="ghost">Do this later</div>
+            </div>`;
+        }
+      },
+      {
+        id: "join-accept",
+        group: "5 · Join as provider",
+        label: "5 · Publish",
+        topic: "Join — Accept & publish",
+        surface: "form",
+        formTitle: "NearMe join",
+        step: "After details + Aadhaar: Accept → published / findable. No admin queue.",
+        path: "Aadhaar ok\n→ Accept → Published in Find",
+        composer: "",
+        renderForm(root) {
+          root.innerHTML = `
+            <div class="form-badge">Step 4 of 4 · Publish</div>
+            <h3>Publish your listing?</h3>
+            <p class="hint">Seekers can find you as an electrician. They choose whether to call — NearMe never messages you for them.</p>
+            <div class="form-field"><label>Summary</label><div class="box">Kumar · Electrician · Navalur · +91 91234 56789 · Aadhaar verified</div></div>
+            <div class="form-actions">
+              <div class="primary">Accept &amp; publish</div>
+              <div class="ghost">Decline</div>
+            </div>`;
+        }
+      },
+    ];
+
+    function day() {
+      const d = document.createElement("div");
+      d.className = "day";
+      d.textContent = "TODAY";
+      return d;
+    }
+    function bot(text) {
+      const row = document.createElement("div");
+      row.className = "row in";
+      row.innerHTML = `<div class="bubble">${esc(text)}<span class="time">10:24</span></div>`;
+      return row;
+    }
+    function user(text) {
+      const row = document.createElement("div");
+      row.className = "row out";
+      row.innerHTML = `<div class="bubble">${esc(text)}<span class="time">10:25</span></div>`;
+      return row;
+    }
+    function replyButtons(labels) {
+      const wrap = document.createElement("div");
+      wrap.className = "buttons";
+      wrap.innerHTML = labels.map((l) => `<button type="button">${esc(l)}</button>`).join("");
+      return wrap;
+    }
+    function listMessage(body, cta) {
+      const wrap = document.createElement("div");
+      wrap.className = "list-card";
+      wrap.innerHTML = `
+        <div class="body">${esc(body)}<span class="time">10:26</span></div>
+        <div class="cta">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h10v2H4v-2z"/></svg>
+          ${esc(cta)}
+        </div>`;
+      return wrap;
+    }
+    function locationOut() {
+      const row = document.createElement("div");
+      row.className = "row out";
+      row.innerHTML = `
+        <div class="loc">
+          <div class="loc-map"></div>
+          <div class="loc-meta">
+            <strong>Current location</strong>
+            <span>12.8456, 80.2289</span>
+            <span class="time">10:25</span>
+          </div>
+        </div>`;
+      return row;
+    }
+    function providerCard({ name, line, extra }) {
+      const wrap = document.createElement("div");
+      wrap.className = "pcard";
+      wrap.innerHTML = `
+        <div class="body">
+          <div class="pname">${esc(name)}</div>
+          <div class="pline">${esc(line)}</div>
+          <div class="muted">${esc(extra)}</div>
+          <span class="time">10:26</span>
+        </div>`;
+      return wrap;
+    }
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\n/g, "<br>");
+    }
+
+    const rail = document.getElementById("rail");
+    const phone = document.getElementById("phone");
+    const spec = document.getElementById("spec");
+
+    let lastGroup = null;
+    screens.forEach((s, i) => {
+      if (s.group && s.group !== lastGroup) {
+        const tag = document.createElement("span");
+        tag.className = "rail-label";
+        tag.textContent = s.group;
+        rail.appendChild(tag);
+        lastGroup = s.group;
+      }
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = s.label;
+      b.dataset.idx = String(i);
+      b.addEventListener("click", () => show(i));
+      rail.appendChild(b);
+    });
+
+    function show(i) {
+      rail.querySelectorAll("button").forEach((b) => {
+        b.classList.toggle("active", Number(b.dataset.idx) === i);
+      });
+      const s = screens[i];
+      const isForm = s.surface === "form";
+
+      if (isForm) {
+        phone.innerHTML = `
+          <div class="status" style="background:#e8e8e8;color:#111"><span>9:41</span><span>●●● 5G ▮▮▮</span></div>
+          <div class="wa-header" style="background:#f0f2f5;color:#111">
+            <div class="avatar">NM</div>
+            <div class="meta">
+              <div class="name" style="color:#111">${esc(s.formTitle || "NearMe")}</div>
+              <div class="sub" style="color:#54656f;opacity:1">Secure form</div>
+            </div>
+          </div>
+          <div class="form-surface" id="formRoot"></div>`;
+        s.renderForm(phone.querySelector("#formRoot"));
+      } else {
+        phone.innerHTML = `
+          <div class="status"><span>9:41</span><span>●●● 5G ▮▮▮</span></div>
+          <div class="wa-header">
+            <div class="avatar">NM</div>
+            <div class="meta">
+              <div class="name">NearMe</div>
+              <div class="sub">online</div>
+            </div>
+          </div>
+          <div class="chat" id="chat"></div>
+          <div class="composer">
+            <div class="attach">＋</div>
+            <div class="field">${esc(s.composer || "Message…").replace(/<br>/g, " ")}</div>
+            <div class="mic">🎤</div>
+          </div>`;
+        const chat = phone.querySelector("#chat");
+        s.render(chat);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      spec.innerHTML = `
+        <div class="flow-tag">${esc(s.group)}</div>
+        <h2>${esc(s.topic)}</h2>
+        <p class="step">${esc(s.step)}</p>
+        <pre class="path">${esc(s.path)}</pre>
+        ${s.listSheet ? sheetHtml(s.listSheet) : ""}
+      `;
+    }
+
+    function sheetHtml(sheet) {
+      return `<div class="sheet"><h3>${esc(sheet.title)}</h3><ul>
+        ${sheet.rows.map(([t, d]) => `<li>${esc(t)}${d ? `<span>${esc(d)}</span>` : ""}</li>`).join("")}
+      </ul></div>`;
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const buttons = [...rail.querySelectorAll("button")];
+      const current = buttons.findIndex((b) => b.classList.contains("active"));
+      const next = e.key === "ArrowRight"
+        ? Math.min(current + 1, screens.length - 1)
+        : Math.max(current - 1, 0);
+      show(next);
+    });
+
+    show(0);
+  </script>
+</body>
+</html>
